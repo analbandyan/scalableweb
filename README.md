@@ -62,3 +62,5 @@ can be run one of the following three ways
 
 In order to run the application one needs to specify AWS S3 client _access key_ and _secret key_. 
 The default template values are set to `CHANGEME` in _application.yml_ and _application-docker.yml_.
+
+The default server port is 8096.
