@@ -1,0 +1,75 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.1'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+group = 'com.waes'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+
+	//add all unit tests dependencies to integration test dependencies
+	//to not add those dependencies manually and make duplicate configurations
+	testIntegrationCompile.extendsFrom testCompile
+	testIntegrationRuntime.extendsFrom testRuntime
+	testIntegrationImplementation.extendsFrom testImplementation
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+	compile group: 'com.amazonaws', name: 'aws-java-sdk-bom', version: '1.11.923'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.923'
+	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	runtimeOnly 'mysql:mysql-connector-java'
+
+	compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.2'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testCompile group: 'org.assertj', name: 'assertj-core', version: '3.18.1'
+	testIntegrationRuntime 'mysql:mysql-connector-java'
+}
+
+sourceSets {
+	testIntegration {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/test-integration/java')
+		}
+		resources.srcDir file('src/test-integration/resources')
+	}
+}
+
+task testIntegration(type: Test) {
+	testClassesDirs = sourceSets.testIntegration.output.classesDirs
+	classpath = sourceSets.testIntegration.runtimeClasspath
+	//to always run integration tests irrespectively from the direct dependency changes
+	outputs.upToDateWhen { false }
+}
+
+task testAll(dependsOn: ['test', 'testIntegration'])
+
+test {
+	useJUnitPlatform()
+}
+
+testIntegration {
+	useJUnitPlatform()
+}

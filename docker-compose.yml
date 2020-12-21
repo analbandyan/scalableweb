@@ -1,0 +1,20 @@
+version: '3'
+services:
+  scalableweb-mysql:
+    restart: always
+    container_name: scalableweb-mysql
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: diffsdocker
+      MYSQL_ROOT_PASSWORD: waes_mysql
+    ports:
+      - 3307:3306
+  scalableweb:
+    container_name: scalableweb
+    restart: on-failure
+    build: .
+    ports:
+      - 8096:8096
+    entrypoint: ["/home/app/wait-for-it.sh", "scalableweb-mysql:3306", "--", "java", "-jar", "-Dspring.profiles.active=docker", "/home/app/scalableweb.jar"]
+    depends_on:
+      - scalableweb-mysql
