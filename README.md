@@ -43,8 +43,8 @@ The success response structure is the same for all three endpoints.
 ## Implementation details
 
 The API accepts Multipart files, and uploads them into AWS S3 storage without loading the 
-entire binary data into memory. For diif calculation the application uses data stream
-and again does not load the entire binary data into memory. This approach allows calculating
+entire binary data into the memory. For diff calculation the application uses AWS S3 data stream
+and again does not load the entire binary data into the memory. This approach allows calculating
 diffs for any size of data.
 
 ## How to run
@@ -60,5 +60,5 @@ can be run one of the following three ways
     - `docker-compose up`
 
 
-In order to run the application one needs to specify AWS S3 client access key and secret key. The default 
-template values are set to `CHANGEME` in _application.yml_ and _application-docker.yml_.
+In order to run the application one needs to specify AWS S3 client _access key_ and _secret key_. 
+The default template values are set to `CHANGEME` in _application.yml_ and _application-docker.yml_.
