@@ -2,7 +2,6 @@ package com.waes.scalableweb.service.storage;
 
 import com.waes.scalableweb.dao.DiffRepository;
 import com.waes.scalableweb.entity.CalculationStatus;
-import com.waes.scalableweb.entity.Diff;
 import com.waes.scalableweb.entity.DiffStatus;
 import com.waes.scalableweb.entity.Diffs;
 import com.waes.scalableweb.exception.exceptions.DiffRequestAlreadyExistsException;
@@ -10,8 +9,6 @@ import com.waes.scalableweb.service.AbstractServiceTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -53,19 +50,6 @@ public class DiffsStorageServiceDefaultTest extends AbstractServiceTest {
 
         Diffs actual = diffRepository.getByNaturalId("id");
         assertThat(actual.getCalculationStatus()).isEqualTo(CalculationStatus.CALCULATING);
-    }
-
-    @Test
-    public void testDiffCalculationCompleted() {
-        diffsStorageServiceDefault.createNewDiffsObject("id", DiffStatus.DIFFERENT, CalculationStatus.UPLOADING);
-
-        diffsStorageServiceDefault.diffCalculationCompleted("id", Set.of(
-                new Diff(null, 1L, 2L, null),
-                new Diff(null, 5L, 10L, null)
-        ));
-
-        Diffs actual = diffRepository.getByNaturalId("id");
-        assertThat(actual.getCalculationStatus()).isEqualTo(CalculationStatus.DONE);
     }
 
 }
