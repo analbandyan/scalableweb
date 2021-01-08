@@ -7,12 +7,18 @@ This is a scalable web service providing difference calculation of any size of b
 
 Endpoints:
   - `<host>/v1/diff/<ID>` - POST endpoint to upload left and right side binary data
-  and get the diff result as a blocking call.
+  and get the diff result as a blocking call. 
+    - curl command template"
+        - curl -F "left=@ABSOLUTE_PATH_TO_THE_LEFT_FILE" -F "right=@ABSOLUTE_PATH_TO_THE_RIGHT_FILE" <host>/v1/diff/<ID>
   - `<host>/v1/diff/<ID>/async` - POST endpoint to upload left and right side binary data
     and get the diff result asynchronously. Both upload and calculation are being done 
     asynchronously. The result contains information about the current processing state
     of the request.
+    - curl command template"
+        - curl -F "left=@ABSOLUTE_PATH_TO_THE_LEFT_FILE" -F "right=@ABSOLUTE_PATH_TO_THE_RIGHT_FILE" <host>/v1/diff/<ID>/async
   - `<host>/v1/diff/<ID>/status` - GET endpoint to get diff result for one of the previous requests.
+    - curl command template"
+        - curl <host>/v1/diff/<ID>/status
  
 The success response structure is the same for all three endpoints.
   - an example of incomplete request result
